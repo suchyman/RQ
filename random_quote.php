@@ -173,15 +173,6 @@ class class_random_quote extends WP_Widget {
 		echo $args['before_title'] . $title . $args['after_title'];
 
 
-
-
-// $quo = $wpdb->get_row( "SELECT post_title, post_content FROM w2d4p_posts WHERE post_type='quote' AND post_status='publish' AND ID=483", ARRAY_N );
-// echo $quo[0] . '<br>' . $quo[1];
-
-
-
-//require plugin_dir_path( __FILE__ ) . 'includes/class-random_quote.php';
-
 $option = get_option( 'todayCiteOption' );
 if ($option=='d') {
 require plugin_dir_path( __FILE__ ) . 'oneDay.php';	// code...
@@ -189,20 +180,6 @@ require plugin_dir_path( __FILE__ ) . 'oneDay.php';	// code...
 require plugin_dir_path( __FILE__ ) . 'oneVisit.php';
 }
 
-
-
-
-//||||||||||||||||||||||||||||||||||||||||
-// $args = array( 'post_type' => 'quote', 'orderby'=> 'rand', 'posts_per_page' => 1 );
-// $loop = new WP_Query( $args );
-// while ( $loop->have_posts() ) : $loop->the_post();
-//     echo '<div class="quote_content">"' . get_the_content() . '"</div><div class="quote_author">Autor: ' . get_the_title() . '</div>';
-// 		// echo get_the_id() . '<div class="quote_content">"' . get_the_content() . '"</div><div class="quote_author">Autor: ' . get_the_title() . '</div>';
-// endwhile;
-
-//||||||||||||||||||||||||||||||||||||||||
-
-		// echo __( $o, 'random_quote' );
 		echo $args['after_widget'];
 	}
 
