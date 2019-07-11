@@ -102,6 +102,27 @@ function wpfstop_change_default_title( $title ){
 }
 add_filter( 'enter_title_here', 'wpfstop_change_default_title' );
 
+///////////////////////////settings page//////////////////////////////////////
+
+function plugin_add_settings_link( $links ) {
+    $settings_link = '<a href="options-general.php?page=RandQuot">' . __( 'Settings' ) . '</a>';
+    array_push( $links, $settings_link );
+  	return $links;
+}
+$plugin = plugin_basename( __FILE__ );
+add_filter( "plugin_action_links_$plugin", 'plugin_add_settings_link' );
+add_action( 'admin_menu', 'my_plugin_menu' );
+function my_plugin_menu() {
+	add_options_page( 'My Plugin Options', 'Random Quote', 'manage_options', 'RandQuot', 'my_plugin_options' );
+}
+function my_plugin_options() {
+	if ( !current_user_can( 'manage_options' ) )  {
+		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+	}
+	require plugin_dir_path( __FILE__ ) . 'rqconf.php';
+}
+
+/////////////////////////////////////////////////////////////////////////////////
 
 add_action( 'init', 'randomQuotes' );
 
@@ -151,37 +172,36 @@ class class_random_quote extends WP_Widget {
 		if ( ! empty( $title ) )
 		echo $args['before_title'] . $title . $args['after_title'];
 
+
+
+
 // $quo = $wpdb->get_row( "SELECT post_title, post_content FROM w2d4p_posts WHERE post_type='quote' AND post_status='publish' AND ID=483", ARRAY_N );
 // echo $quo[0] . '<br>' . $quo[1];
 
-$tomorrow  = mktime(0, 0, 0, date("m")  , date("d")+1, date("Y"));
-$today  = mktime(0, 0, 0, date("m")  , date("d"), date("Y"));
-$yesterday = mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"));
-
-echo 'dzisiaj: ' . $today . '<br>';
-echo 'jutro: ' . $tomorrow . '<br>';
-echo 'wczoraj: ' . $yesterday . '<hr>';
-
-//add_option( 'todayCite', 'kanno', '', 'yes' );
-//update_option( 'default_comment_status', 'closed' );
-//(get_option( 'todayCite' )
 
 
-if (get_option( 'todayCite' ) == $today) {
-	echo get_option( 'todayCite' );
+//require plugin_dir_path( __FILE__ ) . 'includes/class-random_quote.php';
+
+$option = get_option( 'todayCiteOption' );
+if ($option=='d') {
+require plugin_dir_path( __FILE__ ) . 'oneDay.php';	// code...
+} else {
+require plugin_dir_path( __FILE__ ) . 'oneVisit.php';
 }
-else {
-	echo 'niet';
-	// update_option( 'default_comment_status', 'closed' );
-};
 
-echo get_option( 'todayCite' ) . '<br><hr>';
 
-$args = array( 'post_type' => 'quote', 'orderby'=> 'rand', 'posts_per_page' => 1 );
-$loop = new WP_Query( $args );
-while ( $loop->have_posts() ) : $loop->the_post();
-    echo get_the_id() . '<div class="quote_content">"' . get_the_content() . '"</div><div class="quote_author">Autor: ' . get_the_title() . '</div>';
-endwhile;
+
+
+//||||||||||||||||||||||||||||||||||||||||
+// $args = array( 'post_type' => 'quote', 'orderby'=> 'rand', 'posts_per_page' => 1 );
+// $loop = new WP_Query( $args );
+// while ( $loop->have_posts() ) : $loop->the_post();
+//     echo '<div class="quote_content">"' . get_the_content() . '"</div><div class="quote_author">Autor: ' . get_the_title() . '</div>';
+// 		// echo get_the_id() . '<div class="quote_content">"' . get_the_content() . '"</div><div class="quote_author">Autor: ' . get_the_title() . '</div>';
+// endwhile;
+
+//||||||||||||||||||||||||||||||||||||||||
+
 		// echo __( $o, 'random_quote' );
 		echo $args['after_widget'];
 	}
